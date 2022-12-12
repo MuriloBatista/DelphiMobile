@@ -1,6 +1,7 @@
 object frmPrincipal: TfrmPrincipal
   Left = 0
   Top = 0
+  ActiveControl = lstTarefas
   Caption = 'Form1'
   ClientHeight = 480
   ClientWidth = 373
@@ -68,8 +69,10 @@ object frmPrincipal: TfrmPrincipal
       Size.Height = 432.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
+      ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
       StyleLookup = 'listviewstyle'
       OnDeleteItem = lstTarefasDeleteItem
+      DeleteButtonText = 'Excluir'
     end
   end
 end
