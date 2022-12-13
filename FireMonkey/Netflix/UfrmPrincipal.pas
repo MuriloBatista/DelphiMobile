@@ -9,7 +9,7 @@ uses
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.Ani, FMX.ListBox;
 
 type
-  TForm1 = class(TForm)
+  TfrmPrincipal = class(TForm)
     imgCartaz: TImage;
     Image1: TImage;
     imgLogo: TImage;
@@ -44,14 +44,14 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmPrincipal: TfrmPrincipal;
 
 implementation
 
 {$R *.fmx}
 { TForm1 }
 
-procedure TForm1.LoadMenu;
+procedure TfrmPrincipal.LoadMenu;
 begin
   ListBox1.Items.Clear;
 
@@ -71,7 +71,7 @@ begin
   Self.SetupMenu(TlistBoxItem.Create(ListBox1), 'Terror');
 end;
 
-procedure TForm1.OpenMenu(ind: Boolean);
+procedure TfrmPrincipal.OpenMenu(ind: Boolean);
 begin
   // Esconde o item selecionado ...
   ListBox1.ItemIndex := -1;
@@ -96,7 +96,7 @@ begin
   FloatAnimation1.Start;
 end;
 
-procedure TForm1.SetupMenu(Item: TlistBoxItem; texto: String);
+procedure TfrmPrincipal.SetupMenu(Item: TlistBoxItem; texto: String);
 begin
   Item.Text := texto;
   Item.StyledSettings := Item.StyledSettings - [TStyledSetting.Size,
