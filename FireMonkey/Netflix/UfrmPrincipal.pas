@@ -30,9 +30,18 @@ type
     lytMenu: TLayout;
     Rectangle1: TRectangle;
     lytFechar: TLayout;
-    Image6: TImage;
+    imgFechar: TImage;
     ListBox1: TListBox;
     FloatAnimation1: TFloatAnimation;
+{$IFDEF MSWINDOWS}
+    procedure MenuClick(Sender: TObject);
+{$ELSE}
+    procedure MenuTap(Sender: TObject; const Point: TPointF);
+{$ENDIF}
+    procedure FormCreate(Sender: TObject);
+    procedure FloatAnimation1Finish(Sender: TObject);
+    procedure imgFecharClick(Sender: TObject);
+    procedure lytGeneroClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -50,6 +59,28 @@ implementation
 
 {$R *.fmx}
 { TForm1 }
+
+procedure TfrmPrincipal.FloatAnimation1Finish(Sender: TObject);
+begin
+  if lytMenu.Tag = 0 then
+    lytMenu.Visible := False;
+end;
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+  imgCartaz.Position.X := 0;
+  imgCartaz.Position.Y := 0;
+  imgCartaz.Width := 676;
+  imgCartaz.Height := 450;
+
+  Self.LoadMenu;
+  Self.OpenMenu(False);
+end;
+
+procedure TfrmPrincipal.imgFecharClick(Sender: TObject);
+begin
+  Self.OpenMenu(False);
+end;
 
 procedure TfrmPrincipal.LoadMenu;
 begin
@@ -70,6 +101,25 @@ begin
   Self.SetupMenu(TlistBoxItem.Create(ListBox1), 'Suspense');
   Self.SetupMenu(TlistBoxItem.Create(ListBox1), 'Terror');
 end;
+
+procedure TfrmPrincipal.lytGeneroClick(Sender: TObject);
+begin
+  Self.OpenMenu(True);
+end;
+
+{$IFDEF MSWINDOWS}
+procedure TfrmPrincipal.MenuClick(Sender: TObject);
+begin
+  lblFiltro.Text := TlistBoxItem(Sender).Text;
+  Self.OpenMenu(False);
+end;
+{$ELSE}
+procedure TfrmPrincipal.MenuTap(Sender: TObject; const Point: TPointF);
+begin
+  lblFiltro.Text := TlistBoxItem(Sender).Text;
+  Self.OpenMenu(False);
+end;
+{$ENDIF}
 
 procedure TfrmPrincipal.OpenMenu(ind: Boolean);
 begin
@@ -109,7 +159,6 @@ begin
 {$ELSE}
   Item.OnTap := Self.MenuTap;
 {$ENDIF}
-
   if ListBox1.Items.Count > 0 then
   begin
     Item.FontColor := $FFC3C3C3;

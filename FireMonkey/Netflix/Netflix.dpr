@@ -3,12 +3,12 @@ program Netflix;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  UfrmPrincipal in 'UfrmPrincipal.pas' {Form1};
+  UfrmPrincipal in 'UfrmPrincipal.pas' {frmPrincipal};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
   Application.Run;
 end.
