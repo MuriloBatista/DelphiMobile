@@ -64,6 +64,7 @@ object frmPrincipal: TfrmPrincipal
       ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
       HeaderAppearanceClassName = 'TListHeaderObjects'
       FooterAppearanceClassName = 'TListHeaderObjects'
+      ItemIndex = 0
       Align = Client
       Size.Width = 373.000000000000000000
       Size.Height = 432.000000000000000000
@@ -73,6 +74,34 @@ object frmPrincipal: TfrmPrincipal
       StyleLookup = 'listviewstyle'
       OnDeleteItem = lstTarefasDeleteItem
       DeleteButtonText = 'Excluir'
+    end
+  end
+  object PrototypeBindSource1: TPrototypeBindSource
+    AutoActivate = True
+    AutoPost = False
+    FieldDefs = <
+      item
+        Name = 'ContactName1'
+        Generator = 'ContactNames'
+        ReadOnly = False
+      end>
+    ScopeMappings = <>
+    Left = 272
+    Top = 96
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 20
+    Top = 5
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = PrototypeBindSource1
+      FieldName = 'ContactName1'
+      Control = lstTarefas
+      FillExpressions = <>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
     end
   end
 end
