@@ -98,7 +98,31 @@ end;
 
 procedure TForm1.SetupMenu(Item: TlistBoxItem; texto: String);
 begin
+  Item.Text := texto;
+  Item.StyledSettings := Item.StyledSettings - [TStyledSetting.Size,
+    TStyledSetting.FontColor, TStyledSetting.Other];
+  Item.TextSettings.HorzAlign := TTextAlign.Center;
+  Item.HitTest := True;
 
+{$IFDEF MSWINDOWS}
+  Item.OnClick := Self.MenuClick;
+{$ELSE}
+  Item.OnTap := Self.MenuTap;
+{$ENDIF}
+
+  if ListBox1.Items.Count > 0 then
+  begin
+    Item.FontColor := $FFC3C3C3;
+    Item.Font.Size := 20;
+    Item.Height := 80;
+  end
+  else
+  begin
+    Item.FontColor := $FFFFFFFF;
+    Item.Font.Size := 25;
+    Item.Height := 110;
+  end;
+  ListBox1.AddObject(Item);
 end;
 
 end.
