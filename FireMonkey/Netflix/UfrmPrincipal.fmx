@@ -10,7 +10,7 @@ object frmPrincipal: TfrmPrincipal
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  DesignerMasterStyle = 0
+  DesignerMasterStyle = 3
   object imgCartaz: TImage
     MultiResBitmap.Height = 450
     MultiResBitmap = <
