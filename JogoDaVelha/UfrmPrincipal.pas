@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes,
   System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
-  FMX.Layouts, FMX.TabControl, FMX.StdCtrls, FMX.Effects;
+  FMX.Layouts, FMX.TabControl, FMX.StdCtrls, FMX.Effects, UJogoVelha;
 
 type
   TfrmPrincipal = class(TForm)
@@ -103,9 +103,9 @@ begin
 
   xRetangulo.HitTest := False;
 
-  FJogoVelha.VerificarFimJogo(TJogador.tpPlayer1);
+  FJogoVelha.VerificarFimDoJogo(TJogador.tpPlayer1);
 
-  if (not FJogoVelha.FimJovo) and (FJogoVelha.Jogadas, 5) then
+  if (not FJogoVelha.FimJogo) and (FJogoVelha.Jogadas < 5) then
   begin
     xCoordenadas := FJogoVelha.JogadaComputador;
     Self.MarcarJogadaComputador(xCoordenadas);
@@ -118,10 +118,10 @@ begin
   else
   begin
     if (FJogoVelha.Jogadas < 5) or (FJogoVelha.FimJogo) then
-      Self.AnimarFimJogo(rect_parabens);
-  else
-    Self.AnimarFimJogo(rect_deu_velha);
-end;
+      Self.AnimarFimJogo(rect_parabens)
+    else
+      Self.AnimarFimJogo(rect_deu_velha);
+  end;
 end;
 
 procedure TfrmPrincipal.OnClickSelecioneJogador(Sender: TObject);
@@ -150,9 +150,11 @@ end;
 procedure TfrmPrincipal.AnimarFimJogo(const aRetangulo: TRectangle);
 begin
   rect_fim_jogo.Visible := True;
+  rect_fundo_tab2.Visible := false;
   rect_progresso.Width := 20;
 
-  aRetangulo.Opacity := 0 aRetangulo.Visible := True;
+  aRetangulo.Opacity := 0;
+  aRetangulo.Visible := True;
 
   TThread.CreateAnonymousThread(
     procedure
@@ -165,68 +167,90 @@ begin
         end);
     end).Start;
 
-  TThread.CreateAnonymousThread(
-  procedure
+  TThread.CreateAnonymousThread( procedure
   begin
-    Sleep(450);
 
-    while rect_progresso.Width < react_fim_jogo.Width do
+  Sleep(450);
+
+  while rect_progresso.Width < rect_fim_jogo.Width do
+   begin
+    TThread.Synchronize(nil, procedure
     begin
-     TThread.Synchronize(nil, procedure
-      begin
-        rect_progresso.AnimateFloat(('width', rect_progresso.Width + 50, 0.3);
-      end);
+      rect_progresso.AnimateFloat('width', rect_progresso.Width + 50, 0.3);
+    end);
 
       Sleep(150);
-    end;
+  end;
 
     TThread.Synchronize(nil, procedure
-      begin
+    begin
         aRetangulo.Visible := False;
         rect_fim_jogo.Visible := False;
+        rect_fundo_tab2.Visible := True;
 
         Self.ReiniciarJogo;
-      end);
+
+     end);
   end).Start;
+ end;
+
+procedure TfrmPrincipal.ReiniciarJogo;
+var
+I: Integer;
+
+begin
+
+TabControl1.ActiveTab := TabItem1;
+
+for I := 0 to Pred(Self.ComponentCount) do
+ begin
+  if (Self.Components[I]is TRectangle) and (Self.Components[I].Tag > 0)then
+  TRectangle(Self.Components[I]).HitTest := True;
+
+  if (Self.Components[I] is TImage) and (Self.Components[I].Tag > 0) then
+  TImage(Self.Components[I]).Bitmap := nil;
+ end;
+
+FJogoVelha.ReiniciarJogo;
+
 end;
 
-procedure TfrmPrincipal.ReiniciarJogo; var I: Integer;
-begin TabControl1.ActiveTab := TabItem1;
-
-for I := 0 to Pred(Self.ComponentCount) do begin if (Self.Components[I]
-  is TRectangle) and (Self.Components[I].Tag > 0)
-then TRectangle(Self.Component[I]).HitTest := True;
-
-if (Self.Components[I] is TImage) and (Self.Components[I].Tag > 0)
-then TImage(Self.Components[I]).Bitmap := nil; end;
-
-FJogoVelha.ReiniciarJogo; end;
-
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
-begin FJogoVelha.DisposeOf; end;
+begin
+  FJogoVelha.DisposeOf;
+end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
-begin FJogoVelha := TJogoVelha.Create; end;
+begin
+  FJogoVelha := TJogoVelha.Create;
+end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
-begin TabControl1.TabPosition := TTabPosition.None;
-TabControl1.ActiveTab := TabItem1; end;
+begin
+  TabControl1.TabPosition := TTabPosition.None;
+  TabControl1.ActiveTab := TabItem1;
+end;
 
 procedure TfrmPrincipal.MarcarJogadaComputador(const aCoordenadas: String);
-var xLinha, xColuna: Byte; xRetangulo: TRectangle; xImagem: TImage;
-begin xLinha := StrToInt(Copy(aCoordenadas, 1, 1));
-xColuna := StrToInt(Copy(aCoordenadas, 3, 1));
+var
+ xLinha, xColuna: Byte;
+ xRetangulo: TRectangle;
+ xImagem: TImage;
+begin
+  xLinha := StrToInt(Copy(aCoordenadas, 1, 1));
+  xColuna := StrToInt(Copy(aCoordenadas, 3, 1));
 
-FJogoVelha.RealizarJogada(TJogador.tpCpu, xLinha, xColuna);
+  FJogoVelha.RealizarJogada(TJogador.tpCpu, xLinha, xColuna);
 
-xRetangulo := TRectangle(FindComponent('rect_' + aCoordenadas));
+  xRetangulo := TRectangle(FindComponent('rect_' + aCoordenadas));
 
-if Assigned(xRetangulo) then begin xImagem :=
-  TImage(FindComponent('img_' + aCoordenadas));
-xImagem.Bitmap := img_computador.Bitmap; xImage.Visible := True;
+if Assigned(xRetangulo) then
+ begin
+  xImagem :=  TImage(FindComponent('img_' + aCoordenadas));
+  xImagem.Bitmap := img_computador.Bitmap; xImagem.Visible := True;
 
-xRetangulo.HitTest := False; end;
-
+  xRetangulo.HitTest := False;
+ end;
 end;
 
 end.
