@@ -1,0 +1,5 @@
+#FFFAF9F9 -  Fundo
+#FF515151 - Font
+#FFF3EBD4 - Bege
+#FFE6AA37 - Laranja
+

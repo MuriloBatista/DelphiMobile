@@ -1,0 +1,33 @@
+object frmDescricao: TfrmDescricao
+  Left = 0
+  Top = 0
+  Caption = 'Descricao'
+  ClientHeight = 600
+  ClientWidth = 325
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object VertScrollBox1: TVertScrollBox
+    Align = Client
+    Size.Width = 325.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 325.000000000000000000
+    Viewport.Height = 600.000000000000000000
+    object lyt_descricao: TLayout
+      Align = Client
+      Size.Width = 325.000000000000000000
+      Size.Height = 600.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object rect_header: TRectangle
+        Align = Top
+        Size.Width = 325.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+end
